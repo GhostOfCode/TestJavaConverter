@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>Конвертер валют</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="https://getbootstrap.com/docs/4.5/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" href="https://getbootstrap.com/docs/4.5/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="https://getbootstrap.com/docs/4.5/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="https://getbootstrap.com/docs/4.5/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
+    <link rel="icon" href="https://getbootstrap.com/docs/4.5/assets/img/favicons/favicon.ico">
+
+    <style>
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            padding-top: 10%;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+        }
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="text-center">
+<div class="container">
+
+    <div class="row">
+        <div class="col-8 offset-2">
+            <h1>История</h1>
+            <form th:action="@{/history}" th:object="${filter}"  method="post">
+
+                <div class="form-row">
+                    <div class="form-group col-8">
+                        <input th:field="*{date}" type="date" class="form-control offset-3">
+                    </div>
+                    <div class="form-group col-8">
+                        <select th:field="*{currencyFromCode}" id="inputFrom" class="custom-select offset-3">
+                            <option value="">Исходная валюта</option>
+                            <option th:each="currency : ${currenciesList}"
+                                    th:text="'(' + ${currency.charCode} + ') ' + ${currency.name}"
+                                    th:value="${currency.numCode}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-8">
+                        <select th:field="*{currencyToCode}" id="inputTo" class="custom-select offset-3">
+                            <option value="">Целевая валюта</option>
+                            <option th:each="currency : ${currenciesList}"
+                                    th:text="'(' + ${currency.charCode} + ') ' + ${currency.name}"
+                                    th:value="${currency.numCode}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-6 offset-3">
+                            <input type="submit"
+                                   name="convert-submit"
+                                   id="convert-submit"
+                                   class="form-control btn btn-primary my-1"
+                                   value="Поиск"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <a href="/" th:href="@{/}">Вернуться в конвертер</a></span>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th> Исходная валюта </th>
+                        <th> Целевая валюта </th>
+                        <th> Исходная сумма </th>
+                        <th> Получаемая сумма </th>
+                        <th> Дата </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+<!--                    <tr th:if="${conversions.empty}">-->
+<!--                        <td colspan="5"> История отсутствует </td>-->
+<!--                    </tr>-->
+                    <tr th:each="conversion : ${conversions}">
+                        <td th:text="${conversion.currencyFrom}"></td>
+                        <td th:text="${conversion.currencyTo}"></td>
+                        <td th:text="${conversion.amount}"></td>
+                        <td th:text="${conversion.result}"></td>
+                        <td th:text="${conversion.date}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>
