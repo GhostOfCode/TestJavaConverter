@@ -1,13 +1,6 @@
 package notyetnamed.example.currency_demo.services;
 
 import notyetnamed.example.currency_demo.components.XmlHandler;
-import notyetnamed.example.currency_demo.repositories.ConversionRepository;
-import notyetnamed.example.currency_demo.repositories.CurrencyRepository;
-import notyetnamed.example.currency_demo.repositories.CurrencyValueRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.xml.sax.SAXException;
 import notyetnamed.example.currency_demo.dto.ConversionDto;
 import notyetnamed.example.currency_demo.dto.HistoryEntry;
 import notyetnamed.example.currency_demo.dto.HistoryFilter;
@@ -16,6 +9,14 @@ import notyetnamed.example.currency_demo.entities.Currency;
 import notyetnamed.example.currency_demo.entities.CurrencyValue;
 import notyetnamed.example.currency_demo.mappers.ConversionDtoMapper;
 import notyetnamed.example.currency_demo.mappers.ConversionMapper;
+import notyetnamed.example.currency_demo.repositories.ConversionRepository;
+import notyetnamed.example.currency_demo.repositories.CurrencyRepository;
+import notyetnamed.example.currency_demo.repositories.CurrencyValueRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -54,8 +55,11 @@ public class CurrencyService {
     private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
     private SimpleDateFormat historyFilterFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    @Value("${currency.url}")
+    private String url;
+
     public void getCourses(String dateString) throws IOException, ParserConfigurationException, SAXException {
-        URL url = new URL("http://www.cbr.ru/scripts/XML_daily.asp?date_req=" + dateString);
+        URL url = new URL(this.url + dateString);
         InputStream xmlStream = url.openStream();
 
         SAXParserFactory factory = SAXParserFactory.newInstance();
